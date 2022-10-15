@@ -48,7 +48,7 @@ stop(_State) ->
 %     load_all_drivers(Drivers).
 
 unload_all_drivers() ->
-    emqx_extension_hook:disable_all().
+    abplug:disable_all().
 
 search_exhooks() ->
     search_exhooks(ignore_lib_apps(application:loaded_applications())).

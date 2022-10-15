@@ -3,7 +3,7 @@
 -export([load/1
     % , unload/0
 ]).
--include("emqx_extension_hook.hrl").
+-include("abplug.hrl").
 
 -compile([{parse_transform, lager_transform}]).
 % -include_lib("emqx/include/emqx.hrl").
@@ -35,7 +35,7 @@
         , stringfy/1
         ]).
 
--import(emqx_extension_hook,
+-import(abplug,
         [ cast/2
         , call_fold/4
         ]).

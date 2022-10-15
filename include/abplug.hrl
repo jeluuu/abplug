@@ -1,5 +1,5 @@
--ifndef(EMQX_EXTENSION_HOOK_HRL).
--define(EMQX_EXTENSION_HOOK_HRL, true).
+-ifndef(ABPLUG_HRL).
+-define(_HRL, true).
 
 % -define(APP, emqx_extension_hook).
 -define(APP, abplug).
