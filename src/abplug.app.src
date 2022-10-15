@@ -1,6 +1,6 @@
 {application, abplug,
  [{description, "EMQX PLUGIN TEST"},
-  {vsn, "0.1.0"},
+  {vsn, "git"},
   {registered, [abplug_sup]},
   {mod, {abplug_app, []}},
   {applications,
