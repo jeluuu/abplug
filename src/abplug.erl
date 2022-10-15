@@ -1,7 +1,9 @@
 -module(abplug).
 
--export([load/1, unload/0]).
-
+-export([load/1
+    % , unload/0
+]).
+-include("emqx_extension_hook.hrl").
 -include_lib("emqx/include/emqx.hrl").
 -include_lib("emqx/include/emqx_hooks.hrl").
 
