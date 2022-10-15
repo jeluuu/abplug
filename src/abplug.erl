@@ -325,6 +325,6 @@ assign_to_message([_|More], Message) ->
     assign_to_message(More, Message).
 
 
-test(Message) when payload =:= <<"netstratum">> ->
+test(Message = #message{payload = <<"netstratum">>}) -> %when payload =:= <<"netstratum">> ->
     lager:start(),
   lager:info("welcome to Netsrtatum3").
