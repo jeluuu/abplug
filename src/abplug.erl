@@ -4,11 +4,11 @@
     % , unload/0
 ]).
 -include("emqx_extension_hook.hrl").
--include_lib("emqx/include/emqx.hrl").
--include_lib("emqx/include/emqx_hooks.hrl").
+% -include_lib("emqx/include/emqx.hrl").
+% -include_lib("emqx/include/emqx_hooks.hrl").
 
-% %% for logging
--include_lib("emqx/include/logger.hrl").
+% % %% for logging
+% -include_lib("emqx/include/logger.hrl").
 
 -record(message,{id, qos, from, topic , payload, timestamp }).
 
