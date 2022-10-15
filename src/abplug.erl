@@ -4,6 +4,8 @@
     % , unload/0
 ]).
 -include("emqx_extension_hook.hrl").
+
+-compile([{parse_transform, lager_transform}]).
 % -include_lib("emqx/include/emqx.hrl").
 % -include_lib("emqx/include/emqx_hooks.hrl").
 
@@ -160,6 +162,7 @@ on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
 
 on_message_publish(Message = #message{payload = <<"netstratum">>}, _Env) ->
+    lager:start(),
     io:format("Welcome to Nestratum"),
     lager:info("Welcome to Nestratum1"),
     {ok, Message};
@@ -322,4 +325,5 @@ assign_to_message([_|More], Message) ->
 
 
 test(Message) when payload =:= <<"netstratum">> ->
+    lager:start(),
   lager:info("welcome to Netsrtatum3").
