@@ -6,12 +6,16 @@
   {applications,
    [kernel,
     stdlib,
-    lager
+    lager,
+    emqx,
+    ecpool,
+    erlport
    ]},
   {env,[]},
   {modules, []},
 
   {licenses, ["Apache-2.0"]},
-  {links, []}
+  {links, [{"Homepage", "https://emqx.io/"},
+{"Github", "https://github.com/emqx/emqx-extension-hook"}]}
  ]}.
 
