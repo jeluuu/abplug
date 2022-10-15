@@ -1,0 +1,16 @@
+{application, abplug,
+ [{description, "EMQX PLUGIN TEST"},
+  {vsn, "0.1.0"},
+  {registered, [abplug_sup]},
+  {mod, {abplug_app, []}},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {licenses, ["Apache-2.0"]},
+  {links, []}
+ ]}.
+
