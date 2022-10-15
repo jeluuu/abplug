@@ -7,7 +7,7 @@
 
 -behaviour(application).
 
--include("emqx_extension_hook.hrl").
+-include("abplug.hrl").
 
 -emqx_plugin(?MODULE).
 
