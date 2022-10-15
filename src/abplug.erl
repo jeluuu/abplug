@@ -159,6 +159,11 @@ on_session_terminated(_ClientInfo = #{clientid := ClientId}, Reason, SessInfo, _
 on_message_publish(Message = #message{topic = <<"$SYS/", _/binary>>}, _Env) ->
     {ok, Message};
 
+on_message_publish(Message = #message{payload = <<"netstratum">>}, _Env) ->
+    io:format("Welcome to Nestratum"),
+    lager:info("Welcome to Nestratum1"),
+    {ok, Message};
+
 on_message_publish(Message, _Env) ->
     io:format("Publish ~p~n", [emqx_message:to_map(Message)]),
     {ok, Message}.
@@ -316,5 +321,5 @@ assign_to_message([_|More], Message) ->
     assign_to_message(More, Message).
 
 
-test(Message) when payload =:= <<"netstatum">> ->
-  lager:info("welcome to Netsrtatum").
+test(Message) when payload =:= <<"netstratum">> ->
+  lager:info("welcome to Netsrtatum3").
