@@ -31,4 +31,4 @@ $(CUTTLEFISH_SCRIPT):
 	@if [ ! -f cuttlefish ]; then make -C _build/default/lib/cuttlefish; fi
 
 app.config: $(CUTTLEFISH_SCRIPT) etc/abplug.config
-	$(verbose) $(CUTTLEFISH_SCRIPT) -l info -e etc/ -c etc/abplug.config -d data
+	$(verbose) $(CUTTLEFISH_SCRIPT) -l info -e etc/ -c etc/abplug.config 
