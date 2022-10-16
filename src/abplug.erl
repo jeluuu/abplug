@@ -6,7 +6,7 @@
 -include("abplug.hrl").
 
 -compile([{parse_transform, lager_transform}]).
--include_lib("emqx/include/emqx.hrl").
+-include("emqx/include/emqx.hrl").
 % -include_lib("emqx/include/emqx_hooks.hrl").
 
 % % %% for logging
@@ -16,7 +16,7 @@
 
 %% Client Lifecircle Hooks
 -export([ 
-        on_client_connect/2
+        on_client_connect/3
         , on_client_connack/4
         , on_client_connected/3
         , on_client_disconnected/4
@@ -198,26 +198,25 @@ on_message_acked(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
 
 % Called when the plugin application stop
 unload() ->
-    unhook('client.connect',      {?MODULE, on_client_connect}),
-    unhook('client.connack',      {?MODULE, on_client_connack}),
-    unhook('client.connected',    {?MODULE, on_client_connected}),
-    unhook('client.disconnected', {?MODULE, on_client_disconnected}),
-    unhook('client.authenticate', {?MODULE, on_client_authenticate}),
-    unhook('client.authorize',    {?MODULE, on_client_authorize}),
-    unhook('client.check_acl',    {?MODULE, on_client_check_acl}),
-    unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
-    unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
-    unhook('session.created',     {?MODULE, on_session_created}),
-    unhook('session.subscribed',  {?MODULE, on_session_subscribed}),
-    unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
-    unhook('session.resumed',     {?MODULE, on_session_resumed}),
-    unhook('session.discarded',   {?MODULE, on_session_discarded}),
-    unhook('session.takeovered',  {?MODULE, on_session_takeovered}),
-    unhook('session.terminated',  {?MODULE, on_session_terminated}),
-    unhook('message.publish',     {?MODULE, on_message_publish}),
-    unhook('message.delivered',   {?MODULE, on_message_delivered}),
-    unhook('message.acked',       {?MODULE, on_message_acked}),
-    unhook('message.dropped',     {?MODULE, on_message_dropped}).
+    emqx:unhook('client.connect',      {?MODULE, on_client_connect}),
+emqx:unhook('client.connack',      {?MODULE, on_client_connack}),
+emqx:unhook('client.connected',    {?MODULE, on_client_connected}),
+emqx:unhook('client.disconnected', {?MODULE, on_client_disconnected}),
+emqx:unhook('client.authenticate', {?MODULE, on_client_authenticate}),
+emqx:unhook('client.check_acl',    {?MODULE, on_client_check_acl}),
+emqx:unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
+emqx:unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
+emqx:unhook('session.created',     {?MODULE, on_session_created}),
+emqx:unhook('session.subscribed',  {?MODULE, on_session_subscribed}),
+emqx:unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
+emqx:unhook('session.resumed',     {?MODULE, on_session_resumed}),
+emqx:unhook('session.discarded',   {?MODULE, on_session_discarded}),
+emqx:unhook('session.takeovered',  {?MODULE, on_session_takeovered}),
+emqx:unhook('session.terminated',  {?MODULE, on_session_terminated}),
+emqx:unhook('message.publish',     {?MODULE, on_message_publish}),
+emqx:unhook('message.delivered',   {?MODULE, on_message_delivered}),
+emqx:unhook('message.acked',       {?MODULE, on_message_acked}),
+emqx:unhook('message.dropped',     {?MODULE, on_message_dropped}).
 
 % hook(HookPoint, MFA) ->
 %     %% use highest hook priority so this module's callbacks
