@@ -1,7 +1,8 @@
 {application, abplug,
  [{description, "EMQX PLUGIN TEST"},
   {vsn, "git"},
-  {registered, [abplug_sup]},
+  % {registered, [abplug_sup]},
+  {registered, []},
   {mod, {abplug_app, []}},
   {applications,
    [kernel,
@@ -14,8 +15,10 @@
   {env,[]},
   {modules, []},
 
+
+  {maintainers, ["EMQ X Team <contact@emqx.io>"]},
   {licenses, ["Apache-2.0"]},
   {links, [{"Homepage", "https://emqx.io/"},
-{"Github", "https://github.com/emqx/emqx-extension-hook"}]}
+{"Github", "https://github.com/emqx/emqx-plugin-template"}]}
  ]}.
 

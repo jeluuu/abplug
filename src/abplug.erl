@@ -1,7 +1,7 @@
 -module(abplug).
 
 -export([load/1
-    % , unload/0
+    , unload/0
 ]).
 -include("abplug.hrl").
 
@@ -21,7 +21,7 @@
         , on_client_connected/3
         , on_client_disconnected/4
         , on_client_authenticate/3
-        , on_client_authorize/5
+        , on_client_check_acl/5
         , on_client_subscribe/4
         , on_client_unsubscribe/4
         ]).
@@ -35,10 +35,10 @@
         , stringfy/1
         ]).
 
--import(abplug,
-        [ cast/2
-        , call_fold/4
-        ]).
+% -import(abplug,
+%         [ cast/2
+%         , call_fold/4
+%         ]).
 
 %% Session Lifecircle Hooks
 -export([ on_session_created/3
@@ -93,8 +93,13 @@ load(Env) ->
 %                    props => Props}),
 %     {ok, Props}.
 
-on_client_connect(ConnInfo, _Props) ->
-    cast('client_connect', [conninfo(ConnInfo), props(_Props)]).
+% on_client_connect(ConnInfo, _Props) ->
+%     cast('client_connect', [conninfo(ConnInfo), props(_Props)]).
+
+on_client_connect(ConnInfo = #{clientid := ClientId}, Props, _Env) ->
+    io:format("Client(~s) connect, ConnInfo: ~p, Props: ~p~n",
+              [ClientId, ConnInfo, Props]),
+    {ok, Props}.
 
 on_client_connack(ConnInfo = #{clientid := ClientId}, Rc, Props, _Env) ->
     io:format("Client(~s) connack, ConnInfo: ~p, Rc: ~p, Props: ~p~n",
@@ -114,10 +119,14 @@ on_client_authenticate(ClientInfo = #{clientid := ClientId}, Result, Env) ->
     [ClientId, ClientInfo, Result, Env]),
   {ok, Result}.
 
-on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, Result, Env) ->
-  io:format("Client(~s) authorize, ClientInfo:~n~p~n, ~p to topic(~s) Result:~p,~nEnv:~p~n",
-    [ClientId, ClientInfo, PubSub, Topic, Result, Env]),
-  {ok, Result}.
+on_client_check_acl(_ClientInfo = #{clientid := ClientId}, Topic, PubSub, Result, _Env) ->
+    io:format("Client(~s) check_acl, PubSub:~p, Topic:~p, Result:~p~n",
+              [ClientId, PubSub, Topic, Result]),
+    {ok, Result}.
+% on_client_authorize(ClientInfo = #{clientid := ClientId}, PubSub, Topic, Result, Env) ->
+%   io:format("Client(~s) authorize, ClientInfo:~n~p~n, ~p to topic(~s) Result:~p,~nEnv:~p~n",
+%     [ClientId, ClientInfo, PubSub, Topic, Result, Env]),
+%   {ok, Result}.
 
 on_client_subscribe(#{clientid := ClientId}, _Properties, TopicFilters, _Env) ->
     io:format("Client(~s) will subscribe: ~p~n", [ClientId, TopicFilters]),
@@ -187,28 +196,28 @@ on_message_acked(_ClientInfo = #{clientid := ClientId}, Message, _Env) ->
     io:format("Message acked by client(~s):~n~p~n",
               [ClientId, emqx_message:to_map(Message)]).
 
-%% Called when the plugin application stop
-% unload() ->
-%     unhook('client.connect',      {?MODULE, on_client_connect}),
-%     unhook('client.connack',      {?MODULE, on_client_connack}),
-%     unhook('client.connected',    {?MODULE, on_client_connected}),
-%     unhook('client.disconnected', {?MODULE, on_client_disconnected}),
-%     unhook('client.authenticate', {?MODULE, on_client_authenticate}),
-%     unhook('client.authorize',    {?MODULE, on_client_authorize}),
-%     unhook('client.check_acl',    {?MODULE, on_client_check_acl}),
-%     unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
-%     unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
-%     unhook('session.created',     {?MODULE, on_session_created}),
-%     unhook('session.subscribed',  {?MODULE, on_session_subscribed}),
-%     unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
-%     unhook('session.resumed',     {?MODULE, on_session_resumed}),
-%     unhook('session.discarded',   {?MODULE, on_session_discarded}),
-%     unhook('session.takeovered',  {?MODULE, on_session_takeovered}),
-%     unhook('session.terminated',  {?MODULE, on_session_terminated}),
-%     unhook('message.publish',     {?MODULE, on_message_publish}),
-%     unhook('message.delivered',   {?MODULE, on_message_delivered}),
-%     unhook('message.acked',       {?MODULE, on_message_acked}),
-%     unhook('message.dropped',     {?MODULE, on_message_dropped}).
+% Called when the plugin application stop
+unload() ->
+    unhook('client.connect',      {?MODULE, on_client_connect}),
+    unhook('client.connack',      {?MODULE, on_client_connack}),
+    unhook('client.connected',    {?MODULE, on_client_connected}),
+    unhook('client.disconnected', {?MODULE, on_client_disconnected}),
+    unhook('client.authenticate', {?MODULE, on_client_authenticate}),
+    unhook('client.authorize',    {?MODULE, on_client_authorize}),
+    unhook('client.check_acl',    {?MODULE, on_client_check_acl}),
+    unhook('client.subscribe',    {?MODULE, on_client_subscribe}),
+    unhook('client.unsubscribe',  {?MODULE, on_client_unsubscribe}),
+    unhook('session.created',     {?MODULE, on_session_created}),
+    unhook('session.subscribed',  {?MODULE, on_session_subscribed}),
+    unhook('session.unsubscribed',{?MODULE, on_session_unsubscribed}),
+    unhook('session.resumed',     {?MODULE, on_session_resumed}),
+    unhook('session.discarded',   {?MODULE, on_session_discarded}),
+    unhook('session.takeovered',  {?MODULE, on_session_takeovered}),
+    unhook('session.terminated',  {?MODULE, on_session_terminated}),
+    unhook('message.publish',     {?MODULE, on_message_publish}),
+    unhook('message.delivered',   {?MODULE, on_message_delivered}),
+    unhook('message.acked',       {?MODULE, on_message_acked}),
+    unhook('message.dropped',     {?MODULE, on_message_dropped}).
 
 % hook(HookPoint, MFA) ->
 %     %% use highest hook priority so this module's callbacks
