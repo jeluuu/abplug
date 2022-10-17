@@ -7,7 +7,7 @@
 
 -compile([{parse_transform, lager_transform}]).
 -include("include/emqx.hrl").
-% -include_lib("emqx/include/emqx_hooks.hrl").
+-include_lib("include/emqx_hooks.hrl").
 
 % % %% for logging
 -include_lib("include/logger.hrl").
