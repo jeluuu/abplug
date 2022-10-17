@@ -7,10 +7,10 @@
 
 -compile([{parse_transform, lager_transform}]).
 -include("include/emqx.hrl").
--include_lib("include/emqx_hooks.hrl").
+-include("include/emqx_hooks.hrl").
 
 % % %% for logging
--include_lib("include/logger.hrl").
+-include("include/logger.hrl").
 
 -record(message,{id, qos, from, topic , payload, timestamp }).
 
