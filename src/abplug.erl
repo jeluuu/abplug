@@ -5,7 +5,7 @@
 ]).
 -include("abplug.hrl").
 
-% -compile([{parse_transform, lager_transform}]).
+-compile([{parse_transform, lager_transform}]).
 -include("include/emqx.hrl").
 % -include_lib("emqx/include/emqx_hooks.hrl").
 
