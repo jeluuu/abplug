@@ -30,7 +30,7 @@ all() -> emqx_ct:all(?MODULE).
 
 init_per_suite(Cfg) ->
     emqx_ct_helpers:start_apps([abplug], fun set_special_cfgs/1),
-    emqx_logger:set_log_level(warning),
+    % emqx_logger:set_log_level(warning),
     Cfg.
 
 end_per_suite(_) ->
