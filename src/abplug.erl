@@ -6,11 +6,11 @@
 -include("abplug.hrl").
 
 -compile([{parse_transform, lager_transform}]).
-% -include("emqx/include/emqx.hrl").
-% -include_lib("emqx/include/emqx_hooks.hrl").
+-include("emqx/include/emqx.hrl").
+-include_lib("emqx/include/emqx_hooks.hrl").
 
 % % %% for logging
-% -include_lib("emqx/include/logger.hrl").
+-include_lib("emqx/include/logger.hrl").
 
 -record(message,{id, qos, from, topic , payload, timestamp }).
 
