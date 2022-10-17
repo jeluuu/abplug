@@ -36,53 +36,53 @@ init_per_suite(Cfg) ->
 end_per_suite(_) ->
     emqx_ct_helpers:stop_apps([abplug]).
 
-set_special_cfgs(emqx) ->
-    application:set_env(emqx, allow_anonymous, false),
-    application:set_env(emqx, enable_acl_cache, false),
-    application:set_env(emqx, plugins_loaded_file,
-                        emqx_ct_helpers:deps_path(emqx, "test/emqx_SUITE_data/loaded_plugins"));
-set_special_cfgs(abpu) ->
-    application:set_env(abplug, drivers, []),
-    ok.
+% set_special_cfgs(emqx) ->
+%     application:set_env(emqx, allow_anonymous, false),
+%     application:set_env(emqx, enable_acl_cache, false),
+%     application:set_env(emqx, plugins_loaded_file,
+%                         emqx_ct_helpers:deps_path(emqx, "test/emqx_SUITE_data/loaded_plugins"));
+% set_special_cfgs(abpu) ->
+%     application:set_env(abplug, drivers, []),
+%     ok.
 
 
-reload_plugin_with(_DriverName = python3) ->
-    application:stop(abplug),
-    Path = emqx_ct_helpers:deps_path(abplug, "test/scripts"),
-    Drivers = [{python3, [{init_module, main},
-                          {python_path, Path},
-                          {call_timeout, 5000}]}],
-    application:set_env(abplug, drivers, Drivers),
-    application:ensure_all_started(abplug);
+% reload_plugin_with(_DriverName = python3) ->
+%     application:stop(abplug),
+%     Path = emqx_ct_helpers:deps_path(abplug, "test/scripts"),
+%     Drivers = [{python3, [{init_module, main},
+%                           {python_path, Path},
+%                           {call_timeout, 5000}]}],
+%     application:set_env(abplug, drivers, Drivers),
+%     application:ensure_all_started(abplug);
 
-reload_plugin_with(_DriverName = java) ->
-    application:stop(abplug),
+% reload_plugin_with(_DriverName = java) ->
+%     application:stop(abplug),
 
-    ErlPortJar = emqx_ct_helpers:deps_path(erlport, "priv/java/_pkgs/erlport.jar"),
-    Path = emqx_ct_helpers:deps_path(abplug, "test/scripts"),
-    Drivers = [{java, [{init_module, 'Main'},
-                       {java_path, Path},
-                       {call_timeout, 5000}]}],
+%     ErlPortJar = emqx_ct_helpers:deps_path(erlport, "priv/java/_pkgs/erlport.jar"),
+%     Path = emqx_ct_helpers:deps_path(abplug, "test/scripts"),
+%     Drivers = [{java, [{init_module, 'Main'},
+%                        {java_path, Path},
+%                        {call_timeout, 5000}]}],
 
-    %% Compile it
-    ct:pal(os:cmd(lists:concat(["cd ", Path, " && ",
-                                "rm -rf Main.class State.class && ",
-                                "javac -cp ", ErlPortJar, " Main.java"]))),
+%     %% Compile it
+%     ct:pal(os:cmd(lists:concat(["cd ", Path, " && ",
+%                                 "rm -rf Main.class State.class && ",
+%                                 "javac -cp ", ErlPortJar, " Main.java"]))),
 
-    application:set_env(abplug, drivers, Drivers),
-    application:ensure_all_started(abplug).
+%     application:set_env(abplug, drivers, Drivers),
+%     application:ensure_all_started(abplug).
 
 %%--------------------------------------------------------------------
 %% Test cases
 %%--------------------------------------------------------------------
 
-t_python3(_) ->
-    reload_plugin_with(python3),
-    schedule_all_hooks().
+% t_python3(_) ->
+%     reload_plugin_with(python3),
+%     schedule_all_hooks().
 
-t_java(_) ->
-    reload_plugin_with(java),
-    schedule_all_hooks().
+% t_java(_) ->
+%     reload_plugin_with(java),
+%     schedule_all_hooks().
 
 schedule_all_hooks() ->
     ok = abplug:on_client_connect(conninfo(), #{}),
