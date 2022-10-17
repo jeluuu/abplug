@@ -23,6 +23,8 @@ xref:
 distclean:
 	@rm -rf _build
 	@rm -f data/app.*.config data/vm.*.args rebar.lock
+	@rm -rf _build erl_crash.dump rebar3.crashdump rebar.lock abplug_cli
+
 
 CUTTLEFISH_SCRIPT = _build/default/lib/cuttlefish/cuttlefish
 
