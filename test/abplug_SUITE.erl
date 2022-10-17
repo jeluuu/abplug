@@ -17,25 +17,30 @@
 -module(abplug_SUITE).
 
 -compile(export_all).
--compile(nowarn_export_all).
+% -compile(nowarn_export_all).
 
--include_lib("eunit/include/eunit.hrl").
--include_lib("common_test/include/ct.hrl").
+% -include_lib("eunit/include/eunit.hrl").
+% -include_lib("common_test/include/ct.hrl").
+% 
+all() -> [].
+
+groups() -> [].
 
 %%--------------------------------------------------------------------
 %% Setups
 %%--------------------------------------------------------------------
 
-all() -> emqx_ct:all(?MODULE).
+% %==========================
+% all() -> emqx_ct:all(?MODULE).
 
-init_per_suite(Cfg) ->
-    emqx_ct_helpers:start_apps([abplug], fun set_special_cfgs/1),
-    % emqx_logger:set_log_level(warning),
-    Cfg.
+% init_per_suite(Cfg) ->
+%     emqx_ct_helpers:start_apps([abplug]),
+%     emqx_logger:set_log_level(warning),
+%     Cfg.
 
-end_per_suite(_) ->
-    emqx_ct_helpers:stop_apps([abplug]).
-
+% end_per_suite(_) ->
+%     emqx_ct_helpers:stop_apps([abplug]).
+% %==========================================
 % set_special_cfgs(emqx) ->
 %     application:set_env(emqx, allow_anonymous, false),
 %     application:set_env(emqx, enable_acl_cache, false),
@@ -84,57 +89,58 @@ end_per_suite(_) ->
 %     reload_plugin_with(java),
 %     schedule_all_hooks().
 
-schedule_all_hooks() ->
-    ok = abplug:on_client_connect(conninfo(), #{}),
-    ok = abplug:on_client_connack(conninfo(), success,#{}),
-    ok = abplug:on_client_connected(clientinfo(), conninfo()),
-    ok = abplug:on_client_disconnected(clientinfo(), takeovered, conninfo()),
-    {stop, #{auth_result := success,
-             anonymous := false}} = abplug:on_client_authenticate(clientinfo(), #{auth_result => not_authorised, anonymous => true}),
-    {stop, allow} = abplug:on_client_check_acl(clientinfo(), publish, <<"t/a">>, deny),
-    ok = abplug:on_client_subscribe(clientinfo(), #{}, sub_topicfilters()),
-    ok = abplug:on_client_unsubscribe(clientinfo(), #{}, unsub_topicfilters()),
+%==========================
+% schedule_all_hooks() ->
+%     ok = abplug:on_client_connect(conninfo(), #{}),
+%     ok = abplug:on_client_connack(conninfo(), success,#{}),
+%     ok = abplug:on_client_connected(clientinfo(), conninfo()),
+%     ok = abplug:on_client_disconnected(clientinfo(), takeovered, conninfo()),
+%     {stop, #{auth_result := success,
+%              anonymous := false}} = abplug:on_client_authenticate(clientinfo(), #{auth_result => not_authorised, anonymous => true}),
+%     {stop, allow} = abplug:on_client_check_acl(clientinfo(), publish, <<"t/a">>, deny),
+%     ok = abplug:on_client_subscribe(clientinfo(), #{}, sub_topicfilters()),
+%     ok = abplug:on_client_unsubscribe(clientinfo(), #{}, unsub_topicfilters()),
 
-    ok = abplug:on_session_created(clientinfo(), sessinfo()),
-    ok = abplug:on_session_subscribed(clientinfo(), <<"t/a">>, subopts()),
-    ok = abplug:on_session_unsubscribed(clientinfo(), <<"t/a">>, subopts()),
-    ok = abplug:on_session_resumed(clientinfo(), sessinfo()),
-    ok = abplug:on_session_discarded(clientinfo(), sessinfo()),
-    ok = abplug:on_session_takeovered(clientinfo(), sessinfo()),
-    ok = abplug:on_session_terminated(clientinfo(), sockerr, sessinfo()).
+%     ok = abplug:on_session_created(clientinfo(), sessinfo()),
+%     ok = abplug:on_session_subscribed(clientinfo(), <<"t/a">>, subopts()),
+%     ok = abplug:on_session_unsubscribed(clientinfo(), <<"t/a">>, subopts()),
+%     ok = abplug:on_session_resumed(clientinfo(), sessinfo()),
+%     ok = abplug:on_session_discarded(clientinfo(), sessinfo()),
+%     ok = abplug:on_session_takeovered(clientinfo(), sessinfo()),
+%     ok = abplug:on_session_terminated(clientinfo(), sockerr, sessinfo()).
 
-%%--------------------------------------------------------------------
-%% Generator
-%%--------------------------------------------------------------------
+% %%--------------------------------------------------------------------
+% %% Generator
+% %%--------------------------------------------------------------------
 
-conninfo() ->
-    #{clientid => <<"123">>,
-      username => <<"abc">>,
-      peername => {{127,0,0,1}, 2341},
-      sockname => {{0,0,0,0}, 1883},
-      proto_name => <<"MQTT">>,
-      proto_ver => 4,
-      keepalive => 60
-     }.
+% conninfo() ->
+%     #{clientid => <<"123">>,
+%       username => <<"abc">>,
+%       peername => {{127,0,0,1}, 2341},
+%       sockname => {{0,0,0,0}, 1883},
+%       proto_name => <<"MQTT">>,
+%       proto_ver => 4,
+%       keepalive => 60
+%      }.
 
-clientinfo() ->
-    #{clientid => <<"123">>,
-      username => <<"abc">>,
-      peerhost => {127,0,0,1},
-      sockport => 1883,
-      protocol => 'mqtt',
-      mountpoint => undefined
-     }.
+% clientinfo() ->
+%     #{clientid => <<"123">>,
+%       username => <<"abc">>,
+%       peerhost => {127,0,0,1},
+%       sockport => 1883,
+%       protocol => 'mqtt',
+%       mountpoint => undefined
+%      }.
 
-sub_topicfilters() ->
-    [{<<"t/a">>, #{qos => 1}}].
+% sub_topicfilters() ->
+%     [{<<"t/a">>, #{qos => 1}}].
 
-unsub_topicfilters() ->
-    [<<"t/a">>].
+% unsub_topicfilters() ->
+%     [<<"t/a">>].
 
-sessinfo() ->
-    {session,xxx,yyy}.
+% sessinfo() ->
+%     {session,xxx,yyy}.
 
-subopts() ->
-    #{qos => 1, rh => 0, rap => 0, nl => 0}.
+% subopts() ->
+%     #{qos => 1, rh => 0, rap => 0, nl => 0}.
 
