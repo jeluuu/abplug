@@ -1,7 +1,7 @@
 {application, abplug,
  [{applications, [kernel, stdlib, lager, ecpool, erlport]},
   {description, "EMQX PLUGIN TEST"},
-  {id,"emqtt"},
+  {id,"emqx"},
   {vsn, "git"},
   % {registered, [abplug_sup]},
   {registered, []},
